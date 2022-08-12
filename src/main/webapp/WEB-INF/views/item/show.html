@@ -47,6 +47,11 @@
                     </a>
                     <span th:text="${item.name}"></span>
                 </td>
+                <td>
+                    <form th:method="DELETE" th:action="@{/item/{id}(id=${item.getId()})}">
+                        <input type="submit" value="Delete!"/>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
