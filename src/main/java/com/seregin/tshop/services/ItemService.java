@@ -1,4 +1,4 @@
-package com.seregin.tshop.dao;
+package com.seregin.tshop.services;
 
 import com.seregin.tshop.models.Item;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Seregin Vladimir
  */
-public interface ItemDAO {
+public interface ItemService {
     List<Item> index();
 
     Item show(int id);
@@ -17,5 +17,4 @@ public interface ItemDAO {
     void edit(int id, Item updatedItem);
 
     void delete(int id);
-
 }
