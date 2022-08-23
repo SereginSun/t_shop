@@ -2,7 +2,7 @@ package com.seregin.tshop.services;
 
 import com.seregin.tshop.dao.ItemDAO;
 import com.seregin.tshop.models.Item;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,13 +11,9 @@ import java.util.List;
  * @author Seregin Vladimir
  */
 @Service
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
-    private ItemDAO itemDAO;
-
-    @Autowired
-    public void setItemDAO(ItemDAO itemDAO) {
-        this.itemDAO = itemDAO;
-    }
+    private final ItemDAO itemDAO;
 
     @Override
     public List<Item> index() {

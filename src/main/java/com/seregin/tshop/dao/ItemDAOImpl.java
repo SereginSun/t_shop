@@ -1,9 +1,11 @@
 package com.seregin.tshop.dao;
 
 import com.seregin.tshop.models.Item;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,47 +13,47 @@ import java.util.List;
  * @author Seregin Vladimir
  */
 @Repository
+@RequiredArgsConstructor
 public class ItemDAOImpl implements ItemDAO {
-    private JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
-    @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
+    @Override
+    @Transactional(readOnly = true)
     public List<Item> index() {
-        return jdbcTemplate.query("SELECT * FROM item", new ItemMapper());
+        Session session =  sessionFactory.getCurrentSession();
+        return session.createQuery("select i from Item i", Item.class).getResultList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public Item show(int id) {
-        return jdbcTemplate.query(
-                "SELECT * FROM item WHERE id=?", new Object[]{id}, new ItemMapper()
-        ).stream().findAny().orElse(null);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Item.class, id);
     }
 
     @Override
+    @Transactional
     public void add(Item item) {
-        jdbcTemplate.update(
-                "INSERT INTO item(name, price, category, description, amount) VALUES(?, ?, ?, ?, ?)",
-                item.getName(), item.getPrice(), item.getCategory(), item.getDescription(), item.getAmount()
-        );
+        Session session = sessionFactory.getCurrentSession();
+        session.save(item);
     }
 
     @Override
+    @Transactional
     public void edit(int id, Item updatedItem) {
-        jdbcTemplate.update(
-                "UPDATE item SET name=?, price=?, category=?, description=?, amount=? WHERE id=?",
-                updatedItem.getName(),
-                updatedItem.getPrice(),
-                updatedItem.getCategory(),
-                updatedItem.getDescription(),
-                updatedItem.getAmount(),
-                id
-        );
+        Session session = sessionFactory.getCurrentSession();
+        Item itemToBeEdited = session.get(Item.class, id);
+        itemToBeEdited.setName(updatedItem.getName());
+        itemToBeEdited.setPrice(updatedItem.getPrice());
+        itemToBeEdited.setCategory(updatedItem.getCategory());
+        itemToBeEdited.setDescription(updatedItem.getDescription());
+        itemToBeEdited.setAmount(updatedItem.getAmount());
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM item WHERE id=?", id);
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(session.get(Item.class, id));
     }
 }
