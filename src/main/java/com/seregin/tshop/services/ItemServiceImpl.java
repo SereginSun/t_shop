@@ -16,8 +16,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemDAO itemDAO;
 
     @Override
-    public List<Item> index() {
-        return itemDAO.index();
+    public List<Item> index(int id) {
+        return itemDAO.index(id);
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.List;
  * @author Seregin Vladimir
  */
 public interface ItemService {
-    List<Item> index();
+    List<Item> index(int id);
 
     Item show(int id);
 

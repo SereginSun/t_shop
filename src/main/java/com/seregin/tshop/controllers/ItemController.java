@@ -1,8 +1,10 @@
 package com.seregin.tshop.controllers;
 
+import com.seregin.tshop.models.Category;
 import com.seregin.tshop.models.Item;
+import com.seregin.tshop.services.CategoryServiceImpl;
 import com.seregin.tshop.services.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,54 +13,59 @@ import org.springframework.web.bind.annotation.*;
  * @author Seregin Vladimir
  */
 @Controller
-@RequestMapping("/item")
+@RequestMapping("/tshop")
+@RequiredArgsConstructor
 public class ItemController {
-    private ItemService itemService;
-
-    @Autowired
-    public void setItemService(ItemService itemService) {
-        this.itemService = itemService;
-    }
+    private final ItemService itemService;
+    private final CategoryServiceImpl categoryService;
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("item", itemService.index());
+    public String indexCategory(Model model) {
+        model.addAttribute("category", categoryService.index());
+        return "category/index";
+    }
+
+    @GetMapping("/{category_id}")
+    public String index(@PathVariable("category_id") int id, Model model) {
+        model.addAttribute("items", itemService.index(id));
         return "item/index";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/item/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("item", itemService.show(id));
         return "item/show";
     }
 
-    @GetMapping("/new")
-    public String newItem(@ModelAttribute("item") Item item) {
+    @GetMapping("/item/new")
+    public String newItem(@ModelAttribute("item") Item item, Model model) {
+        model.addAttribute("category", categoryService.index());
         return "item/newItem";
     }
 
-    @PostMapping()
+    @PostMapping("/item")
     public String create(@ModelAttribute("item") Item item) {
         itemService.add(item);
-        return "redirect:/item";
+        return "redirect:/tshop";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/item/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("item", itemService.show(id));
+        model.addAttribute("category", categoryService.index());
         return "item/edit";
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/item/{id}")
     public String update(@ModelAttribute("item") Item item,
                          @PathVariable("id") int id) {
         itemService.edit(id, item);
-        return "redirect:/item";
+        return "redirect:/tshop";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/item/{id}")
     public String delete(@PathVariable("id") int id) {
         itemService.delete(id);
-        return "redirect:/item";
+        return "redirect:/tshop";
     }
 }

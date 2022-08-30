@@ -28,17 +28,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item: ${item}">
-                <td th:text="${item.id}" />
+            <tr th:each="item: ${items}">
+                <td th:text="${item.id}"></td>
                 <td th:text="${item.name}"></td>
-                <td th:text="${item.price}" />
+                <td th:text="${item.price}"></td>
                 <td>
-                    <a th:href="@{/item/{id}(id=${item.getId()})}">View item</a>
+                    <a th:href="@{/tshop/item/{id}(id=${item.getId()})}">View item</a>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a href="/item/new">Create new item</a>
+                    <a href="/tshop/item/new">Create new item</a>
                 </td>
             </tr>
             </tbody>

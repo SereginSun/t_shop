@@ -1,5 +1,6 @@
 package com.seregin.tshop.dao;
 
+import com.seregin.tshop.models.Category;
 import com.seregin.tshop.models.Item;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
@@ -7,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -19,9 +21,13 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Item> index() {
+    public List<Item> index(int id) {
         Session session =  sessionFactory.getCurrentSession();
-        return session.createQuery("select i from Item i", Item.class).getResultList();
+        Category category = session.get(Category.class, id);
+        System.out.println(category);
+        List<Item> items = category.getItems();
+        System.out.println(items);
+        return items;
     }
 
     @Override
@@ -46,8 +52,8 @@ public class ItemDAOImpl implements ItemDAO {
         itemToBeEdited.setName(updatedItem.getName());
         itemToBeEdited.setPrice(updatedItem.getPrice());
         itemToBeEdited.setCategory(updatedItem.getCategory());
-        itemToBeEdited.setDescription(updatedItem.getDescription());
-        itemToBeEdited.setAmount(updatedItem.getAmount());
+        itemToBeEdited.setSpecifications(updatedItem.getSpecifications());
+        itemToBeEdited.setQuantity(updatedItem.getQuantity());
     }
 
     @Override

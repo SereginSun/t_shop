@@ -24,18 +24,22 @@
             Creating new item.
         </div>
         <div class="card-body">
-            <form th:method="POST" th:action="@{/item}" th:object="${item}">
+            <form th:method="POST" th:action="@{/tshop/item}">
                 <div class="form-group">
                     <label for="name">Enter name:</label>
-                    <input type="text" class="form-control" name="name" id="name" th:field="*{name}">
+                    <input type="text" class="form-control" name="name" id="name" th:field="*{item.name}">
                     <label for="price">Enter price:</label>
-                    <input type="text" class="form-control" name="price" id="price" th:field="*{price}">
-                    <label for="category">Enter category:</label>
-                    <input type="text" class="form-control" name="category" id="category" th:field="*{category}">
-                    <label for="description">Enter description:</label>
-                    <input type="text" class="form-control" name="description" id="description" th:field="*{description}">
-                    <label for="amount">Enter amount:</label>
-                    <input type="text" class="form-control" name="amount" id="amount" th:field="*{amount}">
+                    <input type="text" class="form-control" name="price" id="price" th:field="*{item.price}">
+                    <label for="category">Select category:</label>
+                    <select th:field="${item.category.id}" id="category">
+                        <option th:each="category : ${category}" th:value="${category.getId()}"
+                                th:text="${category.getName()}"></option>
+                    </select>
+                    <br>
+                    <label for="specifications">Enter specifications:</label>
+                    <input type="text" class="form-control" name="specifications" id="specifications" th:field="*{item.specifications}">
+                    <label for="quantity">Enter quantity:</label>
+                    <input type="text" class="form-control" name="quantity" id="quantity" th:field="*{item.quantity}">
                 </div>
                 <input type="submit" class="btn btn-primary" value="Create!">
             </form>

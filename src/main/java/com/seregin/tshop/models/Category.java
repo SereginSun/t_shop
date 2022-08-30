@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -11,8 +12,8 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "item")
-public class Item {
+@Table(name = "category")
+public class Category {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -22,18 +23,9 @@ public class Item {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
-    private double price;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
-
-    @Column(name = "specifications")
-    private String specifications;
-
-    @Column(name = "quantity")
-    private int quantity;
+    @OneToMany(mappedBy = "category")
+    @ToString.Exclude
+    private List<Item> items;
 
     @Override
     public boolean equals(Object o) {
@@ -43,8 +35,8 @@ public class Item {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        Item item = (Item) o;
-        return Objects.equals(id, item.id);
+        Category category = (Category) o;
+        return Objects.equals(id, category.id);
     }
 
     @Override
