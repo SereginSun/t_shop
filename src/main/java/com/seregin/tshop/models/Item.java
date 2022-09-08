@@ -4,12 +4,11 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Set;
 
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Entity
 @Table(name = "item")
 public class Item {
@@ -23,7 +22,7 @@ public class Item {
     private String name;
 
     @Column(name = "price")
-    private double price;
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -33,7 +32,11 @@ public class Item {
     private String specifications;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private Set<CartItem> cartItems;
 
     @Override
     public boolean equals(Object o) {
